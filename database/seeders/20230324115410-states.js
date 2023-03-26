@@ -1,31 +1,33 @@
-'use strict'
-const { Op } = require('sequelize')
+'use strict';
+const {Op} = require('sequelize')
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface /*Sequelize*/) {
-    const transaction = await queryInterface.sequelize.transaction()
-    try {
+    const transaction = await queryInterface.sequelize.transaction();
+    try{
       await queryInterface.bulkInsert(
-        'roles',
+        'states',
         [
           {
             id: '1',
-            name: 'public',
+            name: 'Antioquia',
+            country_id: '1',
             created_at: new Date(),
             updated_at: new Date(),
           },
           {
             id: '2',
-            name: 'admin',
+            name: 'Bolivar',
+            country_id: '1',
             created_at: new Date(),
             updated_at: new Date(),
           },
         ],
         { transaction }
-      )
-
+      );
       await transaction.commit()
-    } catch (error) {
+    }catch(error){
       await transaction.rollback()
       throw error
     }
@@ -34,19 +36,15 @@ module.exports = {
   async down(queryInterface /*Sequelize*/) {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.bulkDelete(
-        'roles',
-        {
-          name: {
-            [Op.or]: ['admin', 'public'],
-          },
-        },
-        { transaction }
-      )
+      await queryInterface.bulkDelete('states',{
+        name:{
+          [Op.or]:['Antioquia','Bolivar']
+        }
+      }, {transaction})
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()
       throw error
     }
   },
-}
+};

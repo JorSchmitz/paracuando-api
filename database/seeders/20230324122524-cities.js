@@ -1,52 +1,54 @@
-'use strict'
-const { Op } = require('sequelize')
+'use strict';
+const { Op } = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface /*Sequelize*/) {
-    const transaction = await queryInterface.sequelize.transaction()
+    const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.bulkInsert(
-        'roles',
+        'cities',
         [
           {
             id: '1',
-            name: 'public',
+            name: 'Medellin',
+            state_id: '1',
             created_at: new Date(),
             updated_at: new Date(),
           },
           {
             id: '2',
-            name: 'admin',
+            name: 'Cartagena',
+            state_id: '2',
             created_at: new Date(),
             updated_at: new Date(),
           },
         ],
         { transaction }
-      )
-
-      await transaction.commit()
+      );
+      await transaction.commit();
     } catch (error) {
-      await transaction.rollback()
-      throw error
+      await transaction.rollback();
+      throw error;
     }
   },
 
   async down(queryInterface /*Sequelize*/) {
-    const transaction = await queryInterface.sequelize.transaction()
+    const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.bulkDelete(
-        'roles',
+        'states',
         {
           name: {
-            [Op.or]: ['admin', 'public'],
+            [Op.or]: ['Medellin','Cartagena'],
           },
         },
         { transaction }
-      )
-      await transaction.commit()
+      );
+      await transaction.commit();
     } catch (error) {
-      await transaction.rollback()
-      throw error
+      await transaction.rollback();
+      throw error;
     }
   },
-}
+};
